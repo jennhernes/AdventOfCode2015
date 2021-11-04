@@ -42,26 +42,29 @@ function part1() {
 
 function part2()
 {
-    let results = new Map();
-    results.set(0, ['e']);
-
-    let layer = 0;
-    while (true)
+    rules = rules.sort((x,y) => y.end.length - x.end.length);
+    console.log(rules);
+    let steps = 0;
+    let created = false;
+    let molecule = endresult;
+    while (!created)
     {
-        let molecules = results.get(layer);
-        for (const molecule of molecules)
+        let r = 0;
+        while (molecule.indexOf(rules[r].end) === -1)
         {
-            for (const rule in rules)
-            {
-                let i = substring.indexOf(rule.start);
-                while (i > -1)
-                {
-                    let substring = molecule.slice(i);
-                    let m = molecule.slice(0,i) + molecule.slice(i).replace(rule.start,rule.end);
-                    rules.set(layer+1, rules.get(layer+1).append(m));
-                    i = molecule.slice()
-                }
-            }
+            r++;
+        }
+        let rule = rules[r];
+        console.log(`Looking at rule ${rule.start} => ${rule.end}`);
+        let i = molecule.indexOf(rule.end);
+        let substring = molecule.slice(i);
+        molecule = molecule.slice(0,i) + substring.replace(rule.end,rule.start);
+        steps++;
+        if (molecule === 'e')
+        {
+            console.log(steps + ": " + molecule);
+            created = true;
+            break;
         }
     }
 }
